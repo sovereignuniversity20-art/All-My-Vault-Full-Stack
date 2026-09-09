@@ -26,7 +26,7 @@ public class MediaItem {
     @Lob
     private byte[] fileData;
 
-    public MediaItem() {};
+    public MediaItem() {}
 
     public MediaItem(String title, String type, String tags, LocalDate dateAdded, String fileName, byte[] fileData) {
         this.title = title;
@@ -65,6 +65,9 @@ public class MediaItem {
         this.tags = tags;
     }
 
+    public void setDateAdded(LocalDate dateAdded) {
+        this.dateAdded = dateAdded;
+    }
     public LocalDate getDateAdded() {
         return dateAdded;
     }
