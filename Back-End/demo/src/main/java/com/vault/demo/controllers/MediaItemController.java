@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
+import org.springframework.http.MediaType;
 import java.time.LocalDate;
 
 
@@ -19,6 +19,7 @@ public class MediaItemController {
 
     @Autowired
     private MediaItemRepository mediaItemRepository;
+
 
     private String deriveType (String contentType) {
         if (contentType == null) {
@@ -40,11 +41,18 @@ public class MediaItemController {
     public ResponseEntity<?> uploadMediaItem(@RequestPart("file") MultipartFile file, @RequestPart("title") String title, @RequestPart("tags") String tags) {
         try {
             MediaItem mediaItem = new MediaItem(title, deriveType(file.getContentType()), tags, LocalDate.now(), file.getOriginalFilename(), file.getBytes());
+            mediaItem.setContentType(file.getContentType());
             mediaItemRepository.save(mediaItem);
             return new ResponseEntity<>(mediaItem, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>("Error uploading media item: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("")
+    public ResponseEntity<?> getAllMediaItems() {
+        List<MediaItem> allMediaItems = mediaItemRepository.findAll();
+        return new ResponseEntity<>(allMediaItems, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -57,11 +65,21 @@ public class MediaItemController {
         }
     }
 
-    @GetMapping("")
-    public ResponseEntity<?> getAllMediaItems() {
-        List<MediaItem> allMediaItems = mediaItemRepository.findAll();
-        return new ResponseEntity<>(allMediaItems, HttpStatus.OK);
+    @GetMapping("/{id}/file")
+    public ResponseEntity<byte[]> getMediaBytesById(@PathVariable Long id) {
+        MediaItem mediaItem = mediaItemRepository.findById(id).orElse(null);
+        MediaType mediaType;
+        if (mediaItem != null) {
+            if (mediaItem.getContentType() == null) {
+                mediaType = MediaType.APPLICATION_OCTET_STREAM;
+            } else  {
+               mediaType =  MediaType.parseMediaType(mediaItem.getContentType());
+            }
+            return ResponseEntity.ok().contentType(mediaType).body(mediaItem.getFileData());
+            } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateMediaItem(@PathVariable Long id, @RequestBody MediaItem mediaItem){
@@ -89,6 +107,7 @@ public class MediaItemController {
         }
     }
 }
+
 
 
 
