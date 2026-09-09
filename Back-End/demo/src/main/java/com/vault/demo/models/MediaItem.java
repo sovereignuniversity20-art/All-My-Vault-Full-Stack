@@ -1,6 +1,7 @@
 package com.vault.demo.models;
 
 import jakarta.persistence.*;
+import org.jspecify.annotations.Nullable;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -26,7 +27,7 @@ public class MediaItem {
     @Lob
     private byte[] fileData;
 
-    public MediaItem() {}
+    public MediaItem(String title, String tags, LocalDate now, @Nullable String originalFilename, byte[] bytes) {}
 
     public MediaItem(String title, String type, String tags, LocalDate dateAdded, String fileName, byte[] fileData) {
         this.title = title;

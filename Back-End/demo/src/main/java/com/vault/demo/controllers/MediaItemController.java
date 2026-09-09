@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.time.LocalDate;
 
 
@@ -18,6 +20,32 @@ public class MediaItemController {
     @Autowired
     private MediaItemRepository mediaItemRepository;
 
+    private String deriveType (String contentType) {
+        if (contentType == null) {
+            return "doc";
+            } else if (contentType.startsWith("image/")) {
+                return "image";
+            } else if (contentType.startsWith("video/")) {
+                return "video";
+            } else if (contentType.startsWith("audio/")) {
+                return "audio";
+            } else if (contentType.equals("application/pdf")) {
+                return "pdf";
+            } else {
+                return "doc";
+            }
+        }
+
+    @PostMapping(value = "/upload", consumes = {"multipart/form-data"})
+    public ResponseEntity<?> uploadMediaItem(@RequestPart("file") MultipartFile file, @RequestPart("title") String title, @RequestPart("tags") String tags) {
+        try {
+            MediaItem mediaItem = new MediaItem(title, deriveType(file.getContentType()), tags, LocalDate.now(), file.getOriginalFilename(), file.getBytes());
+            mediaItemRepository.save(mediaItem);
+            return new ResponseEntity<>(mediaItem, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error uploading media item: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getMediaItemById(@PathVariable Long id) {
@@ -34,13 +62,6 @@ public class MediaItemController {
         List<MediaItem> allMediaItems = mediaItemRepository.findAll();
         return new ResponseEntity<>(allMediaItems, HttpStatus.OK);
         }
-
-    @PostMapping("")
-    public ResponseEntity<?> createdMediaItem(@RequestBody MediaItem mediaItem){
-        MediaItem createdMediaItem = mediaItemRepository.save(mediaItem);
-        mediaItem.setDateAdded(java.time.LocalDate.now());
-        return new ResponseEntity<>(createdMediaItem, HttpStatus.CREATED);
-    }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateMediaItem(@PathVariable Long id, @RequestBody MediaItem mediaItem){
@@ -68,6 +89,10 @@ public class MediaItemController {
         }
     }
 }
+
+
+
+
 
 
 
