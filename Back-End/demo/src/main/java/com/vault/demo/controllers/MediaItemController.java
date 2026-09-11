@@ -1,5 +1,6 @@
 package com.vault.demo.controllers;
 
+import com.vault.demo.dto.MediaItemDTO;
 import com.vault.demo.models.MediaItem;
 import com.vault.demo.repositories.MediaItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,7 @@ public class MediaItemController {
             MediaItem mediaItem = new MediaItem(title, deriveType(file.getContentType()), tags, LocalDate.now(), file.getOriginalFilename(), file.getBytes());
             mediaItem.setContentType(file.getContentType());
             mediaItemRepository.save(mediaItem);
-            return new ResponseEntity<>(mediaItem, HttpStatus.CREATED);
+            return new ResponseEntity<>(MediaItemDTO.from(mediaItem), HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>("Error uploading media item: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -51,7 +52,7 @@ public class MediaItemController {
 
     @GetMapping("")
     public ResponseEntity<?> getAllMediaItems() {
-        List<MediaItem> allMediaItems = mediaItemRepository.findAll();
+        List<MediaItemDTO> allMediaItems = mediaItemRepository.findAll().stream().map(MediaItemDTO::from).toList();
         return new ResponseEntity<>(allMediaItems, HttpStatus.OK);
     }
 
@@ -59,7 +60,7 @@ public class MediaItemController {
     public ResponseEntity<?> getMediaItemById(@PathVariable Long id) {
         MediaItem mediaItem = mediaItemRepository.findById(id).orElse(null);
         if (mediaItem != null) {
-            return new ResponseEntity<>(mediaItem, HttpStatus.OK);
+            return new ResponseEntity<>(MediaItemDTO.from(mediaItem), HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Media item not found.", HttpStatus.NOT_FOUND);
         }
