@@ -4,6 +4,18 @@ export const DataProvider = ({ children }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [items, setItems] = useState(null);
     const [error, setError] = useState(null);
+   
+     //Handlers for media card
+
+  const handleDelete = (id) => {
+    setItems(items.filter((item) => id !== item.id))
+  };
+  const handleAdd = (newItem) => {
+    setItems([...items, newItem])
+  };
+  const handleEdit = (updatedItem) => {
+    setItems(items.map((item) => item.id === updatedItem.id ? updatedItem : item));
+  };
 
     useEffect(() => {
         const fetchMediaItems = async () => {
@@ -37,7 +49,7 @@ export const DataProvider = ({ children }) => {
 
 
 return (
-    <DataContext.Provider value={{items, isLoading, error}}>
+    <DataContext.Provider value={{items, isLoading, error, onAdd: handleAdd, onEdit: handleEdit, onDelete: handleDelete}}>
         {children}
     </DataContext.Provider>
 );
