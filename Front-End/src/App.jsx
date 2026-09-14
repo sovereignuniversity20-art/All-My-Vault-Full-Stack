@@ -6,6 +6,7 @@ import DashboardPage from './pages/DashboardPage.jsx';
 import sampleItems from './data/sampleData.js';
 import './index.css';
 import AboutOverlay from './components/AboutOverlay.jsx';
+import { DataProvider } from './context/DataContext.jsx';
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -45,14 +46,16 @@ function App() {
 
   return (
     <main className='App'>
-      <Routes>
+      <DataProvider>
+        <Routes>
         <Route path="/" element={<LoginPage onLogin={handleLogin} onOpenAbout={handleOpenAbout}/>} />
         <Route path="/dashboard" element={isAuthorized ? <DashboardPage items={items} 
         currentUser={currentUser} onAdd={handleAdd} onDelete={handleDelete} 
         onEdit={handleEdit} onLogout={handleLogout} onOpenAbout={handleOpenAbout}/> 
         : <Navigate to="/" />} />
         <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
+        </Routes>
+      </DataProvider>
       <AboutOverlay className="about" isOpen={isAboutOpen} onClose={() =>
           setIsAboutOpen(false)} />
     </main>

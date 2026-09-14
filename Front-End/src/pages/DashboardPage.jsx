@@ -3,6 +3,10 @@
  import MediaCard from "../components/MediaCard";
  import MediaFormModal from "../components/MediaFormModal";
  import Footer from "../components/Footer";
+ import { DataContext } from "../context/DataContext";
+ import { useContext } from "react";
+
+ const { items, isLoading } = useContext(DataContext);
 
 
  
