@@ -1,7 +1,7 @@
 package com.vault.demo.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Objects;
@@ -22,11 +22,15 @@ public class MediaItem {
     private String tags;
     private LocalDate dateAdded;
     private String fileName;
+    private String contentType;
+
 
     @Lob
     private byte[] fileData;
 
-    public MediaItem() {};
+
+    public MediaItem() {  }
+
 
     public MediaItem(String title, String type, String tags, LocalDate dateAdded, String fileName, byte[] fileData) {
         this.title = title;
@@ -35,6 +39,7 @@ public class MediaItem {
         this.dateAdded = dateAdded;
         this.fileName = fileName;
         this.fileData = fileData;
+
     }
 
     public Long getId() {
@@ -65,6 +70,9 @@ public class MediaItem {
         this.tags = tags;
     }
 
+    public void setDateAdded(LocalDate dateAdded) {
+        this.dateAdded = dateAdded;
+    }
     public LocalDate getDateAdded() {
         return dateAdded;
     }
@@ -76,7 +84,7 @@ public class MediaItem {
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }
-
+    @JsonIgnore
     public byte[] getFileData() {
         return fileData;
     }
@@ -93,6 +101,16 @@ public class MediaItem {
         this.user = user;
     }
 
+
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -100,12 +118,12 @@ public class MediaItem {
         MediaItem mediaItem = (MediaItem) o;
         return Objects.equals(id, mediaItem.id) && Objects.equals(title, mediaItem.title) && Objects.equals(type, mediaItem.type)
                 && Objects.equals(tags, mediaItem.tags) && Objects.equals(dateAdded, mediaItem.dateAdded)
-                && Objects.equals(fileName, mediaItem.fileName) && Arrays.equals(fileData, mediaItem.fileData);
+                && Objects.equals(fileName, mediaItem.fileName) && Arrays.equals(fileData, mediaItem.fileData) && Objects.equals(contentType, mediaItem.contentType);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, type, tags, dateAdded, fileName, Arrays.hashCode(fileData));
+        return Objects.hash(id, title, type, tags, dateAdded, fileName, Arrays.hashCode(fileData), contentType);
     }
 
 }
