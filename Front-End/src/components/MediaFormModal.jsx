@@ -29,23 +29,29 @@ const MediaFormModal = ({isOpen, editingItem, onSubmit, onClose}) => {
         let thumbnail = null;
         if (type === 'image') thumbnail = URL.createObjectURL(file);
        
-        setFormValues({...formValues, type: type, title: file.name, thumbnail: thumbnail});
+        setFormValues({...formValues, type: type, title: file.name, file: file});
     };
 
     const handleSubmit = () => {
-        const tagsArray = typeof formValues.tags === 'string'
-        ? formValues.tags.split(',').map(tag => tag.trim())
-        : formValues.tags;
-        const itemData = {
-            ...formValues,
-            tags: tagsArray,
-            dateAdded: new Date().toLocaleDateString(),
-            id: editingItem ? editingItem.id : Date.now().toString()
-        };
-        
-        onSubmit(itemData);
-        onClose();
-
+            if (editingItem) {
+                const plainObject = {
+                    id: editingItem.id,
+                    title: formValues.title,
+                    tags: Array.isArray(formValues.tags)
+                    ? formValues.tags.join(',')
+                    : formValues.tags
+                    }
+                onSubmit(plainObject);
+                } else {
+                const formData = new FormData();
+                formData.append('file', formValues.file);
+                formData.append('title', formValues.title);
+                formData.append('tags', Array.isArray(formValues.tags) 
+                ? formValues.tags.join(',')
+                : formValues.tags);
+                onSubmit(formData);
+                }
+            onClose();
     };
 
     if(!isOpen) return null;

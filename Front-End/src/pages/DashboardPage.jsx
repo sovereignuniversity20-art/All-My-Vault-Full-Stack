@@ -3,10 +3,13 @@
  import MediaCard from "../components/MediaCard";
  import MediaFormModal from "../components/MediaFormModal";
  import Footer from "../components/Footer";
-
+ import { DataContext } from "../context/DataContext";
+ import { useContext } from "react";
 
  
- const DashboardPage = ({items,currentUser, onAdd, onDelete, onEdit, onLogout, onOpenAbout}) => {
+ const DashboardPage = ({currentUser, onLogout, onOpenAbout}) => {
+    const { items, isLoading, onAdd, onDelete, onEdit } = useContext(DataContext);
+
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [editingItem, setEditingItem] = useState(null);
     const [activeFilter, setActiveFilter] = useState('');
@@ -38,7 +41,7 @@ const mediaTypes = ['image', 'audio', 'video', 'pdf']
 
 // Filter Functionality
 
-let visibleItems = items;
+let visibleItems = items || [];
 if (activeFilter !== '' && activeFilter !== 'all') {
     visibleItems = visibleItems.filter((item) => item.type === activeFilter);  
 }
