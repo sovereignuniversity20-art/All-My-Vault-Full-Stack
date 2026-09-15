@@ -14,6 +14,7 @@ import java.time.LocalDate;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 @RestController
 @RequestMapping("/media-items")
 public class MediaItemController {
@@ -39,7 +40,7 @@ public class MediaItemController {
         }
 
     @PostMapping(value = "/upload", consumes = {"multipart/form-data"})
-    public ResponseEntity<?> uploadMediaItem(@RequestPart("file") MultipartFile file, @RequestPart("title") String title, @RequestPart("tags") String tags) {
+    public ResponseEntity<?> uploadMediaItem(@RequestPart("file") MultipartFile file, @RequestPart("title") String title, @RequestPart(value = "tags", required = false) String tags) {
         try {
             MediaItem mediaItem = new MediaItem(title, deriveType(file.getContentType()), tags, LocalDate.now(), file.getOriginalFilename(), file.getBytes());
             mediaItem.setContentType(file.getContentType());
