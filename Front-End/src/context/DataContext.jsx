@@ -103,9 +103,3 @@ return (
     </DataContext.Provider>
     );
 };
-
-// const formData = new FormData();
-//            formData.append('file');
-  //          formData.append('title');
-    //        formData.append('tags');
-      //      formData.append('fileData')
