@@ -33,15 +33,25 @@ const MediaFormModal = ({isOpen, editingItem, onSubmit, onClose}) => {
     };
 
     const handleSubmit = () => {
-        const formData = new FormData();
-            formData.append('file', formValues.file);
-            formData.append('title', formValues.title);
-            formData.append('tags', Array.isArray(formValues.tags) 
-            ? formValues.tags.join(',')
-            : formValues.tags);
-            onSubmit(formData);
+            if (editingItem) {
+                const plainObject = {
+                    id: editingItem.id,
+                    title: formValues.title,
+                    tags: Array.isArray(formValues.tags)
+                    ? formValues.tags.join(',')
+                    : formValues.tags
+                    }
+                onSubmit(plainObject);
+                } else {
+                const formData = new FormData();
+                formData.append('file', formValues.file);
+                formData.append('title', formValues.title);
+                formData.append('tags', Array.isArray(formValues.tags) 
+                ? formValues.tags.join(',')
+                : formValues.tags);
+                onSubmit(formData);
+                }
             onClose();
-
     };
 
     if(!isOpen) return null;

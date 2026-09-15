@@ -10,7 +10,7 @@ export const DataProvider = ({ children }) => {
     
      const fetchMediaItems = async () => {
         const mediaItems = [];
-            try {
+        try {
             const response = await fetch('http://localhost:8080/media-items');
 
             if (!response.ok) {
@@ -56,15 +56,41 @@ export const DataProvider = ({ children }) => {
         }
         };     
 
-  const handleDelete = (id) => {
-    setItems(items.filter((item) => id !== item.id))
-  };
+  const handleDelete = async (id) => {
+        try {
+            const response = await fetch(`http://localhost:8080/media-items/${id}`, {
+            method: 'DELETE',
+             });
+            if (!response.ok) {
+              const errorData = await response.json();
+                 throw new Error(errorData.message || `  ERROR - Status ${response.status}`);
+             } else {
+                  await fetchMediaItems(); 
+             }
+        } catch (error) {
+            console.error(error.message);
+            setError(error.message);
+        }
+        };
   
-  const handleEdit = (updatedItem) => {
-    setItems(items.map((item) => 
-        item.id === updatedItem.id ? updatedItem : item
-    ));
-};
+    const handleEdit = async (updatedItem) => {
+        try {
+            const response = await fetch(`http://localhost:8080/media-items/${updatedItem.id}`, {
+            method: 'PUT',  
+            headers: { 'Content-Type': 'application/json'},
+            body: JSON.stringify(updatedItem),
+            });
+            if (!response.ok) {
+             const errorData = await response.json();
+                 throw new Error(errorData.message || `ERROR - Status ${response.status}`);
+            } else {
+                await fetchMediaItems();
+            }
+        } catch (error) {
+            console.error(error.message);
+            setError(error.message);
+        }
+        };
   useEffect(() => {
         fetchMediaItems();
         }, []);
@@ -75,7 +101,7 @@ return (
     <DataContext.Provider value={{items, isLoading, error, onAdd: handleAdd, onEdit: handleEdit, onDelete: handleDelete}}>
         {children}
     </DataContext.Provider>
-);
+    );
 };
 
 // const formData = new FormData();
