@@ -58,7 +58,7 @@ public class MediaItemController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getMediaItemById(@PathVariable Long id) {
+    public ResponseEntity<?> getMediaItemById(@PathVariable("id") Long id) {
         MediaItem mediaItem = mediaItemRepository.findById(id).orElse(null);
         if (mediaItem != null) {
             return new ResponseEntity<>(MediaItemDTO.from(mediaItem), HttpStatus.OK);
@@ -68,7 +68,7 @@ public class MediaItemController {
     }
 
     @GetMapping("/{id}/file")
-    public ResponseEntity<byte[]> getMediaBytesById(@PathVariable Long id) {
+    public ResponseEntity<byte[]> getMediaBytesById(@PathVariable("id") Long id) {
         MediaItem mediaItem = mediaItemRepository.findById(id).orElse(null);
         MediaType mediaType;
         if (mediaItem != null) {
@@ -84,7 +84,7 @@ public class MediaItemController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateMediaItem(@PathVariable Long id, @RequestBody MediaItem mediaItem){
+    public ResponseEntity<?> updateMediaItem(@PathVariable("id") Long id, @RequestBody MediaItem mediaItem){
         MediaItem existingMediaItem = mediaItemRepository.findById(id).orElse(null);
         if (existingMediaItem != null) {
             existingMediaItem.setTitle(mediaItem.getTitle());
@@ -99,7 +99,7 @@ public class MediaItemController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteMediaItem(@PathVariable Long id){
+    public ResponseEntity<?> deleteMediaItem(@PathVariable("id") Long id){
         MediaItem existingMediaItem = mediaItemRepository.findById(id).orElse(null);
         if (existingMediaItem != null) {
             mediaItemRepository.delete(existingMediaItem);

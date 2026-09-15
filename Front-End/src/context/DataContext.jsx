@@ -19,14 +19,15 @@ export const DataProvider = ({ children }) => {
             } else {
                 const data = await response.json();
                 data.forEach(mediaItem => {
+                     console.log('item type:', mediaItem.type, 'item id:', mediaItem.id);
                         mediaItem.tags = mediaItem.tags ? mediaItem.tags.split(',').map(tag => tag.trim()) 
                         : [];
-                    if (mediaItems.type === 'image') {
-                        mediaItems.thumbnail = `http://localhost:8080/media-items/${mediaItem.id}/file`;
+                    if (mediaItem.type === 'image') {
+                        mediaItem.thumbnail = `http://localhost:8080/media-items/${mediaItem.id}/file`;
         }
                     mediaItems.push(mediaItem);
                 });
-                console.log(mediaItems)
+                console.log('items before set:', mediaItems);
                 setItems(mediaItems);
             }
         } catch (error) {
