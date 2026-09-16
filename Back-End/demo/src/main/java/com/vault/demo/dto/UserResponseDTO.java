@@ -5,15 +5,17 @@ import java.sql.Timestamp;
 public class UserResponseDTO {
 
     private String email;
-    private String name;
+    private String firstname;
+    private String lastname;
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
     public UserResponseDTO(){}
 
-    public UserResponseDTO(String email, String name, Timestamp createdAt, Timestamp updatedAt) {
+    public UserResponseDTO(String email, String firstname, String lastname, Timestamp createdAt, Timestamp updatedAt) {
         this.email = email;
-        this.name = name;
+        this.firstname = firstname;
+        this.lastname = lastname;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -26,12 +28,12 @@ public class UserResponseDTO {
         this.email = email;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstname;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstname) {
+        this.firstname = firstname;
     }
 
     public Timestamp getCreatedAt() {
@@ -48,6 +50,13 @@ public class UserResponseDTO {
 
     public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 }
 
