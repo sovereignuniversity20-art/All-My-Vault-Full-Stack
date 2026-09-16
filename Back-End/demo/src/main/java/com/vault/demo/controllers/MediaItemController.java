@@ -2,27 +2,25 @@ package com.vault.demo.controllers;
 
 import com.vault.demo.dto.MediaItemDTO;
 import com.vault.demo.models.MediaItem;
+import com.vault.demo.models.User;
 import com.vault.demo.repositories.MediaItemRepository;
+import com.vault.demo.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.http.MediaType;
+import java.security.Principal;
 import java.time.LocalDate;
-
-
 import java.util.List;
+
 
 @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 @RestController
 @RequestMapping("/media-items")
 public class MediaItemController {
-
-    @Autowired
-    private MediaItemRepository mediaItemRepository;
-
-
+    
     private String deriveType (String contentType) {
         if (contentType == null) {
             return "doc";
@@ -38,12 +36,20 @@ public class MediaItemController {
                 return "doc";
             }
         }
+    @Autowired
+    private MediaItemRepository mediaItemRepository;
+    
+    @Autowired
+    private UserRepository userRepository;
 
     @PostMapping(value = "/upload", consumes = {"multipart/form-data"})
-    public ResponseEntity<?> uploadMediaItem(@RequestPart("file") MultipartFile file, @RequestPart("title") String title, @RequestPart(value = "tags", required = false) String tags) {
+    public ResponseEntity<?> uploadMediaItem(@RequestPart("file") MultipartFile file, @RequestPart("title") String title, @RequestPart(value = "tags", required = false) String tags, Principal principal) {
         try {
             MediaItem mediaItem = new MediaItem(title, deriveType(file.getContentType()), tags, LocalDate.now(), file.getOriginalFilename(), file.getBytes());
             mediaItem.setContentType(file.getContentType());
+            User user = userRepository.findByEmail(principal.getName())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            mediaItem.setUser(user);
             mediaItemRepository.save(mediaItem);
             return new ResponseEntity<>(MediaItemDTO.from(mediaItem), HttpStatus.CREATED);
         } catch (Exception e) {
@@ -52,15 +58,15 @@ public class MediaItemController {
     }
 
     @GetMapping("")
-    public ResponseEntity<?> getAllMediaItems() {
-        List<MediaItemDTO> allMediaItems = mediaItemRepository.findAll().stream().map(MediaItemDTO::from).toList();
+    public ResponseEntity<?> getAllMediaItems(Principal principal) {
+        List<MediaItemDTO> allMediaItems = mediaItemRepository.findByUserEmail(principal.getName()).stream().map(MediaItemDTO::from).toList();
         return new ResponseEntity<>(allMediaItems, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getMediaItemById(@PathVariable("id") Long id) {
+    public ResponseEntity<?> getMediaItemById(@PathVariable("id") Long id, Principal principal) {
         MediaItem mediaItem = mediaItemRepository.findById(id).orElse(null);
-        if (mediaItem != null) {
+        if (mediaItem != null && mediaItem.getUser() != null && mediaItem.getUser().getEmail().equals(principal.getName())) {
             return new ResponseEntity<>(MediaItemDTO.from(mediaItem), HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Media item not found.", HttpStatus.NOT_FOUND);
@@ -84,9 +90,9 @@ public class MediaItemController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateMediaItem(@PathVariable("id") Long id, @RequestBody MediaItem mediaItem){
+    public ResponseEntity<?> updateMediaItem(@PathVariable("id") Long id, @RequestBody MediaItem mediaItem, Principal principal){
         MediaItem existingMediaItem = mediaItemRepository.findById(id).orElse(null);
-        if (existingMediaItem != null) {
+        if (existingMediaItem != null && mediaItem.getUser() != null && existingMediaItem.getUser().getEmail().equals(principal.getName())) {
             existingMediaItem.setTitle(mediaItem.getTitle());
             existingMediaItem.setType(mediaItem.getType());
             existingMediaItem.setTags(mediaItem.getTags());
@@ -99,9 +105,9 @@ public class MediaItemController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteMediaItem(@PathVariable("id") Long id){
+    public ResponseEntity<?> deleteMediaItem(@PathVariable("id") Long id, Principal principal){
         MediaItem existingMediaItem = mediaItemRepository.findById(id).orElse(null);
-        if (existingMediaItem != null) {
+        if (existingMediaItem != null && existingMediaItem.getUser() != null && existingMediaItem.getUser().getEmail().equals(principal.getName())) {
             mediaItemRepository.delete(existingMediaItem);
             return new ResponseEntity<>("Media item deleted successfully!", HttpStatus.OK);
         } else {
@@ -109,16 +115,4 @@ public class MediaItemController {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
