@@ -6,7 +6,7 @@ import com.vault.demo.exceptions.ItemAlreadyExistsException;
 import com.vault.demo.models.User;
 import com.vault.demo.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
@@ -15,10 +15,10 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl  {
 
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
 
-    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, ModelMapper modelMapper) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, ModelMapper modelMapper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.modelMapper = modelMapper;
@@ -31,7 +31,6 @@ public class UserServiceImpl  {
             User user = modelMapper.map(userRequestDTO, User.class);
             user.setPassword(passwordEncoder.encode(userRequestDTO.getPassword()));
             User savedUser = userRepository.save(user);
-
         return modelMapper.map(savedUser, UserResponseDTO.class);
 
     }
