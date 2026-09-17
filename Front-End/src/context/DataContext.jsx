@@ -4,6 +4,7 @@ export const DataProvider = ({ children }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [items, setItems] = useState(null);
     const [error, setError] = useState(null);
+    const [token, setToken] = useState(null);
     
    
      //Handlers for media card
@@ -11,7 +12,9 @@ export const DataProvider = ({ children }) => {
      const fetchMediaItems = async () => {
         const mediaItems = [];
         try {
-            const response = await fetch('http://localhost:8080/media-items');
+            const response = await fetch('http://localhost:8080/media-items', {
+                headers: {'Authorization': `Bearer ${token}`}
+            });
 
             if (!response.ok) {
                 const errorData = await response.json();
@@ -19,7 +22,6 @@ export const DataProvider = ({ children }) => {
             } else {
                 const data = await response.json();
                 data.forEach(mediaItem => {
-                     console.log('item type:', mediaItem.type, 'item id:', mediaItem.id);
                         mediaItem.tags = mediaItem.tags ? mediaItem.tags.split(',').map(tag => tag.trim()) 
                         : [];
                     if (mediaItem.type === 'image') {
@@ -27,7 +29,6 @@ export const DataProvider = ({ children }) => {
         }
                     mediaItems.push(mediaItem);
                 });
-                console.log('items before set:', mediaItems);
                 setItems(mediaItems);
             }
         } catch (error) {
@@ -43,6 +44,7 @@ export const DataProvider = ({ children }) => {
             const response = await fetch('http://localhost:8080/media-items/upload', {
             method: 'POST',  
             body: formData,
+            headers: {'Authorization': `Bearer ${token}`},
             });
             if (!response.ok) {
              const errorData = await response.json();
@@ -60,6 +62,7 @@ export const DataProvider = ({ children }) => {
         try {
             const response = await fetch(`http://localhost:8080/media-items/${id}`, {
             method: 'DELETE',
+            headers: {'Authorization': `Bearer ${token}`},
              });
             if (!response.ok) {
               const errorData = await response.json();
@@ -77,7 +80,7 @@ export const DataProvider = ({ children }) => {
         try {
             const response = await fetch(`http://localhost:8080/media-items/${updatedItem.id}`, {
             method: 'PUT',  
-            headers: { 'Content-Type': 'application/json'},
+            headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`},
             body: JSON.stringify(updatedItem),
             });
             if (!response.ok) {
@@ -92,13 +95,16 @@ export const DataProvider = ({ children }) => {
         }
         };
   useEffect(() => {
-        fetchMediaItems();
-        }, []);
+        if (token) {
+            fetchMediaItems();
+        }
+        
+    }, [token]);
 
     
 
 return (
-    <DataContext.Provider value={{items, isLoading, error, onAdd: handleAdd, onEdit: handleEdit, onDelete: handleDelete}}>
+    <DataContext.Provider value={{items, isLoading, error, token, setToken, onAdd: handleAdd, onEdit: handleEdit, onDelete: handleDelete}}>
         {children}
     </DataContext.Provider>
     );

@@ -39,7 +39,9 @@ const MediaFormModal = ({isOpen, editingItem, onSubmit, onClose}) => {
                     title: formValues.title,
                     tags: Array.isArray(formValues.tags)
                     ? formValues.tags.join(',')
-                    : formValues.tags
+                    : formValues.tags,
+                    type: editingItem.type,
+                    fileName: editingItem.fileName
                     }
                 onSubmit(plainObject);
                 } else {
