@@ -53,6 +53,7 @@ public class MediaItemController {
             mediaItemRepository.save(mediaItem);
             return new ResponseEntity<>(MediaItemDTO.from(mediaItem), HttpStatus.CREATED);
         } catch (Exception e) {
+            System.out.println("Principal name: " + principal.getName());
             return new ResponseEntity<>("Error uploading media item: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -92,11 +93,11 @@ public class MediaItemController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updateMediaItem(@PathVariable("id") Long id, @RequestBody MediaItem mediaItem, Principal principal){
         MediaItem existingMediaItem = mediaItemRepository.findById(id).orElse(null);
-        if (existingMediaItem != null && mediaItem.getUser() != null && existingMediaItem.getUser().getEmail().equals(principal.getName())) {
-            existingMediaItem.setTitle(mediaItem.getTitle());
-            existingMediaItem.setType(mediaItem.getType());
-            existingMediaItem.setTags(mediaItem.getTags());
-            existingMediaItem.setFileName(mediaItem.getFileName());
+        if (existingMediaItem != null && existingMediaItem.getUser() != null && existingMediaItem.getUser().getEmail().equals(principal.getName())) {
+            if (mediaItem.getTitle() !=null) existingMediaItem.setTitle(mediaItem.getTitle());
+            if (mediaItem.getType() !=null) existingMediaItem.setType(mediaItem.getType());
+            if (mediaItem.getTags() !=null) existingMediaItem.setTags(mediaItem.getTags());
+            if (mediaItem.getFileName() !=null)existingMediaItem.setFileName(mediaItem.getFileName());
             mediaItemRepository.save(existingMediaItem);
             return new ResponseEntity<>("Media item updated successfully!", HttpStatus.OK);
         } else {

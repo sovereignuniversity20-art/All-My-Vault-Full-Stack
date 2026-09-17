@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import wheel from '../images/vault-wheel.png';
 import logo from '../images/logo.png';
+import { DataContext } from "../context/DataContext";
 
 const LoginPage = (props) => {
-    const [name, setName] = useState('');
+    const {setToken} = useContext(DataContext);
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({email:'', password:'', name:'', confirmPassword:''}); 
@@ -13,9 +16,9 @@ const LoginPage = (props) => {
 
    
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        setErrors({email:'', password:'', confirmPassword:'', name:''});
+        setErrors({email:'', password:'', confirmPassword:'', firstName:'', lastName:'' });
 
 // Email and Password Validation //
     if (!/^[a-zA-Z0-9.! # \$ % & ' * + - / = ? ^ _  { | } ~.]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(email)) {
@@ -36,19 +39,41 @@ const LoginPage = (props) => {
     } else if (!/[!@#$%]/.test(password)) {
         setErrors({...errors, password:'Password must contain at least one special character, ! @ # $ % .'})
         
-    } else if (currentStatus === 'signup' && !name) {
-        setErrors({...errors, name:"Name field can not be left empty"}); 
+    } else if (currentStatus === 'signup' && !firstName && !lastName) {
+        setErrors({...errors, firstName:"Name field can not be left empty"}); 
     } else if (currentStatus === 'signup' &&  password !== confirmPassword) {
         setErrors({...errors, confirmPassword:"Passwords do not match, please re-enter."});
     } else {
-        setIsUnlocking(true);
-        setTimeout(() => {
-              props.onLogin({
-            name: currentStatus === 'signup' ? name: email, email: email});
-        }, 3500); 
-      
-    }};
-   
+        if (currentStatus === 'signup') {
+            const response = await fetch(`http://localhost:8080/auth/register`, {
+            method: 'POST',
+            headers: { 'Content-Type': `application/json` },
+            body: JSON.stringify({ firstName, lastName, email, password })
+        }); 
+        if (!response.ok) {
+            setErrors({...errors, email: 'Registration failed. Account with email may already exist'});
+            return;
+        }
+        setCurrentStatus('login');
+        } else {
+            const response = await fetch(`http://localhost:8080/auth/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': `application/json` },
+                body: JSON.stringify({ email, password })
+            }); 
+            if (!response.ok) {
+                setErrors({...errors, email: 'Invalid email or password'});
+            return;
+            }       
+            const data = await response.json();
+            setToken(data.token);
+            setIsUnlocking(true);
+            setTimeout(() => {
+                props.onLogin({ name: email, email });
+            }, 3500); 
+        };
+    }  
+}
     
     return (
     <div className="login">
@@ -74,9 +99,15 @@ const LoginPage = (props) => {
         {currentStatus === 'signup' && (
         <div className="name">
              <label>
-                First and Last Name:
-            <input type="text" value={name}
-            onChange={(e) => setName(e.target.value)}  />
+                First Name:
+            <input type="text" value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}  />
+            {errors.name && <span>{errors.name}</span>}
+            </label>
+            <label>
+                Last Name:
+            <input type="text" value={lastName}
+            onChange={(e) => setLastName(e.target.value)}  />
             {errors.name && <span>{errors.name}</span>}
             </label>
         </div> 
