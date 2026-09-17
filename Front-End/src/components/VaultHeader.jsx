@@ -50,7 +50,6 @@ const VaultHeader = ({currentUser, onOpenForm, searchQuery, activeFilter, onFilt
 
         <div className="header-center">
             <h1 className="title">
-                <span className="title-text">All My Vault</span>
                 <img src={logo} alt="All My Vault" className="logo" /></h1>
         </div>    
         <div className="header-right">

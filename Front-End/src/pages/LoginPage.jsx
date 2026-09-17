@@ -80,82 +80,88 @@ const LoginPage = (props) => {
         <div className={`door-left ${isUnlocking ? 'opening' : ''}`}></div>
         <div className={`door-right ${isUnlocking ? 'opening' : ''}`}></div>
         <img className={`wheel ${isUnlocking ? 'spinning' : ''}`} src={wheel} alt="vault wheel" />
-        <div className={`login-about ${isUnlocking ? 'fading' : ''}`}>
-            
-            
-            <button className="button" type="button"
-            onClick={props.onOpenAbout} >
-                About 💡
-            </button>
-        </div>
-        <div className={`login-content ${isUnlocking ? 'fading' : ''}`}>
-            <h1> <span className="title">
-                    All My Vault
-                </span>
-                <img src={logo} alt="All My Vault" className="cover-logo" />
-            </h1>
-        <h4>Enter Your Email and Password to Access Vault</h4>
-        <form onSubmit={handleSubmit}>
-        {currentStatus === 'signup' && (
-        <div className="name">
-             <label>
-                First Name:
-            <input type="text" value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}  />
-            {errors.name && <span>{errors.name}</span>}
-            </label>
-            <label>
-                Last Name:
-            <input type="text" value={lastName}
-            onChange={(e) => setLastName(e.target.value)}  />
-            {errors.name && <span>{errors.name}</span>}
-            </label>
-        </div> 
-     )} 
-        <div>
-            <label className="email">
-                Email:
-                <input type="email" value={email}
-                 onChange={(e) => setEmail(e.target.value)}
-                />
-                {errors.email && <span>{errors.email}</span>}
-            </label>
-        </div>
-      
-        <div className="pass">
-            <label>
-            Password:
-            <input type="password" value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            />
-            {errors.password && <span>{errors.password}</span>}
-            </label>
-        </div>
+        <div className={`login-about ${isUnlocking ? 'fading' : ''}`}/>       
 
-        <div className="pass-confirm">
-            {currentStatus === 'signup' && (
-        <label>
-        Confirm Password:
-        <input type="password" value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}  />
-        {errors.confirmPassword && <span>{errors.confirmPassword}</span>}
-        </label>
-        )} 
-        </div>
-    
-        <div className="unlock-create">
-            <button className="button" type="submit">{currentStatus === 
-            'signup' ? "Create Vault" : "Unlock Vault"}</button>
-        </div>
-    
-        <div className="login-signup">
-            <button className="button" type="button" onClick={() => currentStatus === 'login' ? setCurrentStatus('signup') : 
-            setCurrentStatus ('login')}>{currentStatus === 'signup' ? "Already have an account? Log in here" : 
-            "Sign up for an account"}</button>
-        </div>
-    </form>
+        <div className={`login-content ${isUnlocking ? 'fading' : ''}`}>
+                <h1> <span className="title"> All My Vault </span>
+                    <img src={logo} alt="All My Vault" className="cover-logo" />
+                </h1>
         </div>
         
+        <div className="login-form-container">
+                <form onSubmit={handleSubmit}>
+                {currentStatus === 'signup' && (
+            
+            <div className="name">
+                        <label>
+                            First Name:
+                        <input type="text" value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}  />
+                        {errors.name && <span>{errors.name}</span>}
+                        </label>
+                        <label>
+                            Last Name:
+                        <input type="text" value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}  />
+                        {errors.name && <span>{errors.name}</span>}
+                        </label>
+            </div> 
+            )} 
+        
+                <div>
+                    <label className="email">
+                        Email:
+                        <input type="email" value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        />
+                        {errors.email && <span>{errors.email}</span>}
+                    </label>
+                </div>
+      
+                <div className="pass">
+                    <label>
+                    Password:
+                    <input type="password" value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    />
+                    {errors.password && <span>{errors.password}</span>}
+                    </label>
+                </div>
+
+                <div className="pass-confirm">
+                    {currentStatus === 'signup' && (
+                    <label>
+                    Confirm Password:
+                    <input type="password" value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}  />
+                    {errors.confirmPassword && <span>{errors.confirmPassword}</span>}
+                    </label>
+                    )} 
+                </div>
+    
+                <div className="unlock-create">
+                    <button className="button" type="submit">{currentStatus === 
+                    'signup' ? "Create Vault" : "Unlock Vault"}</button>
+                </div>
+    
+                <div className="login-signup">
+                    <button className="button" type="button" onClick={() => currentStatus === 'login' ? setCurrentStatus('signup') : 
+                    setCurrentStatus ('login')}>{currentStatus === 'signup' ? "Already have an account? Log in here" : 
+                    "Sign up for an account"}</button>
+                </div> 
+                <div>
+                    <button className="button" type="button"
+                    onClick={props.onOpenAbout} >
+                     About 💡
+                </button>
+                </div>
+                
+        
+            </form> 
+            </div>
+        
+        
+    
     </div>
 );
 };

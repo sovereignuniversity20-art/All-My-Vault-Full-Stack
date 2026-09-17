@@ -19,87 +19,94 @@ button:hover {
 }
 
 .title {
-   position: absolute; 
    font-family: var(--font-title);
-  
-   top: 10.5vh;
-   left: 32vw; 
    font-size: 70px;
    color: var(--off-white);
-   -webkit-text-stroke: 1px var(--charcoal);
+   -webkit-text-stroke: .5px var(--charcoal);
 }
 .cover-logo {
-    position: relative;
     height: 90px;
-    top: 10vh;
-    left: 57vw;
-}
-
-.login h4 {
-    position: absolute;
-    top: 26vh;
-    left: 30.75vw;
-    font-family: var(--font-title);
-    font-size: 25px;
-    color: var(--off-white);
 }
 
 .login-content {
-    position: relative;
+    position: absolute;
+    top: 8%;
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 8;
+    text-align: center;
     transition: opacity 0.5s ease;
+    width: max-content;
+    max-width: 90vw;
+   
 }
 
 .login-content.fading {
     opacity: 0;
 }
 
+.login-content h1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
 .name {
-    position: absolute;
-    left: 37vw;
-    top: 68vh;
     font-family: var(--font-reg);
     font-size: 22px;
     color: var(--off-white);
 }
 
 .email {
-    position: absolute;
-    left: 41vw;
-    top: 72vh;
     font-family: var(--font-reg);
     font-size: 22px;
     color: var(--off-white);
 }
 
 .pass {
-    position: absolute;
-    left: 40vw;
-    top: 76vh;
     font-family: var(--font-reg);
     font-size: 22px;
     color: var(--off-white);
 }
 
 .pass-confirm {
-    position: absolute;
-    left: 37vw;
-    top: 80vh;
     font-family: var(--font-reg);
     font-size: 22px;
     color: var(--off-white);
 }
 
-.unlock-create {
+.login-form-container {
     position: absolute;
-    left: 45vw;
-    top: 84.5vh;
+    bottom: 8%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 280px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    z-index: 8;
+    overflow: hidden;
 }
 
-.login-signup {
-    position: absolute;
-    left: 43vw;
-    top: 89vh;
+.login-form-container label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    color: var(--off-white);
+    font-size: 0.9rem;
+}
+
+.login-form-container span {
+    font-size: 0.75rem;
+    color: #E8B4BC;
+}
+
+.login-form-container form {
+    display:flex;
+    flex-direction: column;
+    gap: 0.75rem;
 }
 
 .login {
@@ -114,11 +121,18 @@ button:hover {
     padding: .1rem 2%;
 }
 
+.login-form-container input {
+    width: 100;
+    box-sizing: border-box;
+}
+
 .login-about {
     position: fixed;
     bottom: 3vh;
     left: 47.75vw;
     z-index: 100;
+    width: fit-content;
+    align-self: center;
     transition: opacity 0.5s ease;
 }
 
@@ -235,11 +249,6 @@ header {
     pointer-events: none;
 }
 
-.header-center h1 {
-    position: relative;
-    top: 1vh;
-    left: 40vw;
-}
 
 .title-text {
     font-size: 28px;
@@ -448,70 +457,12 @@ footer {
 }
 
 @media (max-width: 480px) {
-    header {
-        flex-direction: column;
-        gap: 8px;
+    .login-form-container {
+        width: 240px;
+        bottom: 5vh;
     }
-    .card-grid {
-        grid-template-columns: 1fr;
-    
-    }
-   
-    .card-icon {
-        font-size: 1rem;
-    }
-    .header-center  {
-        min-width: 5vw;
-    }
-    .stats {
-        display: none;
-    }
-    .header-center {
-        display: none;
-    }
-    .login h4 {
-        display: none;
-    }
+
     .title {
-        left: 26.5vw;
-    }
-     .name {
-        left: 25.5vw;
-    }
-    .email {
-        left: 35vw;
-    }
-    .pass {
-        left: 32vw;
-    }
-    .pass-confirm {
-        left: 26vw;
-    }
-    .unlock-create {
-        left: 39vw;
-        top: 83.5vh;
-    }
-    .login-signup {
-        left: 33vw;
-        top: 88vh;
-    }
-    .login-about {
-        left: 43vw;
-    }
-    .name {
-        top: 64vh;
-        left: 30vw;
-    }
-    .email {
-        left: 24vw;
-        top: 71vh;
-    }
-    .pass {
-        left: 21.05vw;
-        top: 75vh;
-    }
-    .pass-confirm {
-        left: 12vw;
-        top: 79vh;
+        display: none;
     }
 }
