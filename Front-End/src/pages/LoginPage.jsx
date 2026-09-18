@@ -89,7 +89,7 @@ const LoginPage = (props) => {
         </div>
         
         <div className="login-form-container">
-                <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
                 {currentStatus === 'signup' && (
             
             <div className="name">
@@ -149,15 +149,15 @@ const LoginPage = (props) => {
                     setCurrentStatus ('login')}>{currentStatus === 'signup' ? "Already have an account? Log in here" : 
                     "Sign up for an account"}</button>
                 </div> 
-                <div>
-                    <button className="button" type="button"
+        
+
+                <div className="login-about">
+                    <button className="about" type="button"
                     onClick={props.onOpenAbout} >
                      About 💡
                 </button>
                 </div>
-                
-        
-            </form> 
+         </form>     
             </div>
         
         

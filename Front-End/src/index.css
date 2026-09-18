@@ -12,6 +12,9 @@
 
 button {
     cursor: pointer;
+    border: 2px solid var(--burgundy);
+    background: var(--pink-light);
+    padding: .25rem;
 }
 
 button:hover {
@@ -109,6 +112,10 @@ button:hover {
     gap: 0.75rem;
 }
 
+.login-form-container button {
+    width: 100%;
+}
+
 .login {
     position: relative;
     background-image: url('./images/vault_inside.png');
@@ -127,18 +134,21 @@ button:hover {
 }
 
 .login-about {
-    position: fixed;
-    bottom: 3vh;
-    left: 47.75vw;
-    z-index: 100;
-    width: fit-content;
-    align-self: center;
+    
+    width: 100%;
     transition: opacity 0.5s ease;
+    display: flex;
+    justify-content: center;
+}
+
+.login-about button {
+    width: fit-content;
 }
 
 .login-about.fading {
     opacity: 0;
 }
+
 
 .overlay-backdrop {
     position: fixed;
@@ -260,11 +270,7 @@ header {
     width: 100%;
 }
 
-.button {
-    border: 2px solid var(--burgundy);
-    background: var(--pink-light);
-    padding: .25rem;
-}
+
 
 body {
     margin:0;
