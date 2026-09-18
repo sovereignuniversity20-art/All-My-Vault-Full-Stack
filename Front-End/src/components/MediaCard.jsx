@@ -7,13 +7,14 @@ const typeIcons = {
     image: '\u{1F4F8}'  
 };
 
-const MediaCard = ({id, title,type, tags, thumbnail, dateAdded, onDelete, onEdit}) => {
+const MediaCard = ({id, title,type, tags, thumbnail, dateAdded, onDelete, onEdit, onEnlarge}) => {
   
+    
 
     return(
-        <article className="mediacard">
-        <ReusableButton label= "🗑" onClick={() => onDelete(id)} variant="delete" />
-        <ReusableButton label="✏️" onClick={() => onEdit({id, title, type, tags, thumbnail, dateAdded})} />
+        <article className="mediacard" onClick={() => onEnlarge({id, title, type, tags, thumbnail, dateAdded})}>
+        <ReusableButton label= "🗑" onClick={(e) => { e.stopPropagation(); onDelete(id)}} variant="delete" />
+        <ReusableButton label="✏️" onClick={(e) => { e.stopPropagation(); onEdit({id, title, type, tags, thumbnail, dateAdded}); }} />
             <br></br>
             <br></br>
         <h4>{title}</h4>

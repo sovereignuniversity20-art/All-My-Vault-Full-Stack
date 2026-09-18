@@ -15,7 +15,13 @@
     const [activeFilter, setActiveFilter] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
     const [isVaultStatOpen, setIsVaultStatOpen] = useState(false);
-    
+    const [enlargedItem, setEnlargedItem] = useState(null);
+    const typeIcons = {
+    pdf: '\u{1F4C3}',
+    audio: '\u{1F3A7}',
+    video: '\u{1F4F9}',
+    image: '\u{1F4F8}'  
+};
 
     //Handlers for Media Card Forms
 
@@ -54,7 +60,7 @@ if (searchQuery !== '') {
         item.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
     );
 }
-
+console.log('enlargedItem:', enlargedItem);
     return (
     <main className="dashboard">
         <VaultHeader currentUser={currentUser} onOpenForm={onOpenForm} 
@@ -66,7 +72,8 @@ if (searchQuery !== '') {
             key={item.id} 
                 {...item} 
                 onDelete={onDelete} 
-                onEdit={handleOpenEdit}/> 
+                onEdit={handleOpenEdit}
+                onEnlarge={setEnlargedItem}/> 
             ))}
          </div>
        <div className="stats">
@@ -96,7 +103,23 @@ if (searchQuery !== '') {
         <MediaFormModal isOpen={isFormOpen} editingItem={editingItem} 
         onSubmit={handleFormSubmit} onClose={() => setIsFormOpen(false)} />
         <Footer className="dash-about"onOpenAbout={onOpenAbout} />
-      
+         {enlargedItem && (
+            <div className="lightbox-backdrop" onClick={() => setEnlargedItem(null)}>
+                <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
+                    {enlargedItem.thumbnail
+                    ? <img src={`http://localhost:8080/media-items/${enlargedItem.id}/file`} alt={enlargedItem.title} className="lightbox-image" />
+                    : <span className="lightbox-icon">{typeIcons[enlargedItem.type]}</span>
+                }
+                    <div className="lightbox-caption">
+                        <h3>{enlargedItem.title}</h3>
+                        <ul>
+                            {enlargedItem.tags.map(tag => <li key={tag}>{tag}</li>)}
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+         )}
     </main>
        
     )
