@@ -95,7 +95,7 @@ if (searchQuery !== '') {
        
         <MediaFormModal isOpen={isFormOpen} editingItem={editingItem} 
         onSubmit={handleFormSubmit} onClose={() => setIsFormOpen(false)} />
-        <Footer onOpenAbout={onOpenAbout} />
+        <Footer className="dash-about"onOpenAbout={onOpenAbout} />
       
     </main>
        
