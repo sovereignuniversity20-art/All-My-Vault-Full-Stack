@@ -1,7 +1,6 @@
 import manifestImage from '../images/vault_manifest_document.png'
 
 const AboutOverlay = ({isOpen, onClose}) => {
-     console.log('overlay isOpen:', isOpen)
     if(!isOpen)
         return (null);
 

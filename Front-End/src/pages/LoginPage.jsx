@@ -88,7 +88,7 @@ const LoginPage = (props) => {
                 </h1>
         </div>
         
-        <div className="login-form-container">
+        <div className={`login-form-container ${isUnlocking ? 'fading' : ''}`}>
         <form onSubmit={handleSubmit}>
                 {currentStatus === 'signup' && (
             

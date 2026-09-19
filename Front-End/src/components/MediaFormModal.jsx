@@ -60,9 +60,12 @@ const MediaFormModal = ({isOpen, editingItem, onSubmit, onClose}) => {
 
 return (
 
-<div className="mediacard">
-    <label>
-    Title:
+<div className="modal-backdrop" onClick={onClose}>
+    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <h3>Add to Vault</h3>  
+        {editingItem ? 'Edit Item' : 'Add to Vault'}     
+        <label>
+        Title:
     <input type="text" value={formValues.title} 
     onChange={(e) => setFormValues({...formValues, title:e.target.value})} />
     </label>
@@ -82,6 +85,7 @@ return (
     
     <button type="button" onClick={onClose}>Cancel 
     </button>
+    </div>
 </div>
 )
 };
