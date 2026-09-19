@@ -368,7 +368,8 @@ header {
 .modal-backdrop {
     position: fixed;
     inset: 0;
-    background-color: rgba(4, 4, 4, 0.85);
+    background: rgba(245, 221, 224, 0.1);
+    backdrop-filter: blur(2px);
     display: flex;
     justify-content: center;
     align-items: center;
