@@ -5,6 +5,7 @@
  import Footer from "../components/Footer";
  import { DataContext } from "../context/DataContext";
  import { useContext } from "react";
+ import ConfirmModal from "../components/ConfirmModal";
 
  
  const DashboardPage = ({currentUser, onLogout, onOpenAbout}) => {
@@ -16,6 +17,8 @@
     const [searchQuery, setSearchQuery] = useState('');
     const [isVaultStatOpen, setIsVaultStatOpen] = useState(false);
     const [enlargedItem, setEnlargedItem] = useState(null);
+    const [itemToDelete, setItemToDelete] = useState(null);
+    const [showUploadSuccess, setShowUploadSuccess] = useState(false);
     const typeIcons = {
     pdf: '\u{1F4C3}',
     audio: '\u{1F3A7}',
@@ -29,11 +32,13 @@ const onOpenForm = () => {
         setIsFormOpen(true);
     };
 
-const handleFormSubmit = (itemData) => {
+const handleFormSubmit = async (itemData) => {
     if (editingItem) {
         onEdit(itemData);
     } else {
-        onAdd(itemData);
+        await onAdd(itemData);
+        console.log('upload done, setting success');
+        setShowUploadSuccess(true);
     }
     setEditingItem(null);
 };
@@ -60,7 +65,7 @@ if (searchQuery !== '') {
         item.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
     );
 }
-console.log('enlargedItem:', enlargedItem);
+
     return (
     <main className="dashboard">
         <VaultHeader currentUser={currentUser} onOpenForm={onOpenForm} 
@@ -71,7 +76,8 @@ console.log('enlargedItem:', enlargedItem);
                  <MediaCard 
             key={item.id} 
                 {...item} 
-                onDelete={onDelete} 
+                onRequestDelete={setItemToDelete}
+                onDelete={onDelete}
                 onEdit={handleOpenEdit}
                 onEnlarge={setEnlargedItem}/> 
             ))}
@@ -102,6 +108,19 @@ console.log('enlargedItem:', enlargedItem);
        
         <MediaFormModal isOpen={isFormOpen} editingItem={editingItem} 
         onSubmit={handleFormSubmit} onClose={() => setIsFormOpen(false)} />
+
+         <ConfirmModal isOpen={itemToDelete !== null}
+         message={"Are you sure you want to delete this item?"}
+         confirmLabel={"Delete"}
+         onConfirm={() => { onDelete(itemToDelete); setItemToDelete(null); }}
+         onClose={() => setItemToDelete(null)} />
+
+         <ConfirmModal isOpen={showUploadSuccess}
+         message={"Item added to your vault!"}
+         onClose={() => setShowUploadSuccess(false)}
+         autoClose={3000} />
+
+
         <Footer className="dash-about"onOpenAbout={onOpenAbout} />
          {enlargedItem && (
             <div className="lightbox-backdrop" onClick={() => setEnlargedItem(null)}>
