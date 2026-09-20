@@ -1,4 +1,4 @@
- import { useState } from "react";
+ import { useEffect, useState } from "react";
  import VaultHeader from "../components/VaultHeader";
  import MediaCard from "../components/MediaCard";
  import MediaFormModal from "../components/MediaFormModal";
@@ -19,6 +19,8 @@
     const [enlargedItem, setEnlargedItem] = useState(null);
     const [itemToDelete, setItemToDelete] = useState(null);
     const [showUploadSuccess, setShowUploadSuccess] = useState(false);
+    const [carouselIndex, setCarouselIndex] = useState(null);
+    const enlargedItem = carouselIndex !== null ? visibleItems[carouselIndex] : null;
     const typeIcons = {
     pdf: '\u{1F4C3}',
     audio: '\u{1F3A7}',
@@ -46,6 +48,22 @@ const handleOpenEdit = (item) => {
     setEditingItem(item);
     setIsFormOpen(true);
 };
+
+// Carousel Navigation Handlers
+
+const handlePrev = () => setCarouselIndex(i => Math.max(0, i-1));
+const handleNext = () => setCarouselIndex(i => Math.min(visibleItems.length - 1, i + 1));
+
+useEffect(() => {
+    if (carouselIndex === null) return;
+    const handleKey = (e) => {
+        if (e.key === 'ArrowLeft') handlePrev();
+        if (e.key === 'ArrowRight') handleNext();
+        if (e.key === 'Escape') setCarouselIndex(null);
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+}, [carouselIndex])
 
 const mediaTypes = ['image', 'audio', 'video', 'pdf']
 
@@ -78,7 +96,7 @@ if (searchQuery !== '') {
                 onRequestDelete={setItemToDelete}
                 onDelete={onDelete}
                 onEdit={handleOpenEdit}
-                onEnlarge={setEnlargedItem}/> 
+                onEnlarge={() => setCarouselIndex(index)}/> 
             ))}
          </div>
        <div className="stats">
