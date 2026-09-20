@@ -136,17 +136,23 @@ if (searchQuery !== '') {
                             src={`http://localhost8080/media-items/${enlargedItem.id}/file`}
                             />
                         :   enlargedItem.type === 'pdf'
-                        ? <iframe
-                            key={enlargedItem.id}
-                            src={`http://localhost:8080/media-items/${enlargedItem.id}/file`}
-                            className="lightbox-pdf"
-                            title={enlargedItem.title}
-                            />
+                        ? <div className="lightbox-pdf-open">
+                            <p>{enlargedItem.title}</p> 
+                            <a
+                                href={`http://localhost:8080/media-items/${enlargedItem.id}/file`}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="button"
+                            >
+                                Open PDF    
+                            </a>
+                            </div>
                         : <span className="lightbox-icon">{typeIcons[enlargedItem.type]}</span>
                     }
                     <div className="lightbox-caption">
                         <h3>{enlargedItem.title}</h3>
                         <ul>
+                            console.log('enlarged tags:', enlargedItem.tags);
                             {enlargedItem.tags.map(tag => <li key={tag}>{tag}</li>)}
                         </ul>
 

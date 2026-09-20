@@ -212,6 +212,18 @@ header {
     font-size: 0.8rem;
 }
 
+.lightbox-video {
+    max-width: 90vw;
+    max-height: 80vh;
+    display: block;
+}
+
+.lightbox-pdf {
+    width: 80 vw;
+    height: 80vh;
+    border: none;
+}
+
 .login-content {
     position: absolute;
     top: 8%;
