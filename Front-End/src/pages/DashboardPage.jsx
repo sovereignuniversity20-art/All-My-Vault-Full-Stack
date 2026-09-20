@@ -16,17 +16,34 @@
     const [activeFilter, setActiveFilter] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
     const [isVaultStatOpen, setIsVaultStatOpen] = useState(false);
-    const [enlargedItem, setEnlargedItem] = useState(null);
     const [itemToDelete, setItemToDelete] = useState(null);
     const [showUploadSuccess, setShowUploadSuccess] = useState(false);
     const [carouselIndex, setCarouselIndex] = useState(null);
-    const enlargedItem = carouselIndex !== null ? visibleItems[carouselIndex] : null;
+    
     const typeIcons = {
     pdf: '\u{1F4C3}',
     audio: '\u{1F3A7}',
     video: '\u{1F4F9}',
     image: '\u{1F4F8}'  
 };
+
+
+// Filter Functionality
+
+let visibleItems = items || [];
+if (activeFilter !== '' && activeFilter !== 'all') {
+    visibleItems = visibleItems.filter((item) => item.type === activeFilter);  
+}
+
+// Search Functionality
+
+if (searchQuery !== '') {
+    visibleItems = visibleItems.filter((item) =>
+        item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+    );
+}
+const enlargedItem = carouselIndex !== null ? visibleItems[carouselIndex] : null;
 
     //Handlers for Media Card Forms
 
@@ -67,21 +84,6 @@ useEffect(() => {
 
 const mediaTypes = ['image', 'audio', 'video', 'pdf']
 
-// Filter Functionality
-
-let visibleItems = items || [];
-if (activeFilter !== '' && activeFilter !== 'all') {
-    visibleItems = visibleItems.filter((item) => item.type === activeFilter);  
-}
-
-// Search Functionality
-
-if (searchQuery !== '') {
-    visibleItems = visibleItems.filter((item) =>
-        item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
-    );
-}
 
     return (
     <main className="dashboard">
@@ -89,7 +91,7 @@ if (searchQuery !== '') {
         searchQuery={searchQuery} activeFilter={activeFilter} 
         onFilterChange={setActiveFilter} onSearchChange={setSearchQuery} onLogout={onLogout} />
          <div className="card-grid">
-             {visibleItems.map((item) => (
+             {visibleItems.map((item, index) => (
                  <MediaCard 
             key={item.id} 
                 {...item} 
@@ -138,7 +140,7 @@ if (searchQuery !== '') {
          autoClose={3000} />
 
         {enlargedItem && (
-            <div className="lightbox-backdrop" onClick={() => setEnlargedItem(null)}>
+            <div className="lightbox-backdrop" onClick={() => setCarouselIndex(null)}>
                 <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
                     {enlargedItem.type === 'image'
                         ? <img src={`http://localhost:8080/media-items/${enlargedItem.id}/file`} 
@@ -174,26 +176,30 @@ if (searchQuery !== '') {
                                 </ul>
                             </div>
                     )}
+                     <div className="carousel-dots">
+                        {visibleItems.map((_, i) => (
+                         <span
+                            key={i}
+                            className={`carousel-dot ${i === carouselIndex ? 'active' : ''}`}
+                            onClick={(e) => {e.stopPropagation(); setCarouselIndex(i); }}
+                         />
+                        ))}
+                    </div>
+
+                    {carouselIndex > 0 && (
+                        <button className="carousel-btn prev" onClick={(e) => {e.stopPropagation(); handlePrev(); }}>‹</button>
+                     )}
+                    {carouselIndex !== null && carouselIndex < visibleItems.length -1 && (
+                        <button className="carousel-btn next" onClick={(e) => {e.stopPropagation(); handleNext(); }}>›</button>
+                    )}
                 </div>
             </div>
          )}
 
-         <div className="carousel-dots">
-            {visibleItems.map((_, i) => (
-                <span
-                    key={i}
-                    className={`carousel-dot ${i === carouselIndex ? 'active' : ''}`}
-                    onClick={(e) => {e.stopPropagation(); setCarouselIndex(i); }}
-                />
-            ))}
-         </div>
+        
 
-         {carouselIndex > 0 && (
-            <button className="carousel-btn prev" onClick={(e) => {e.stopPropagation(); handlePrev(); }}>‹</button>
-         )}
-          {carouselIndex < visibleItems.length -1 && (
-            <button className="carousel-btn next" onClick={(e) => {e.stopPropagation(); handleNext(); }}>›</button>
-         )}
+
+
 
         <Footer className="dash-about"onOpenAbout={onOpenAbout} />
          
