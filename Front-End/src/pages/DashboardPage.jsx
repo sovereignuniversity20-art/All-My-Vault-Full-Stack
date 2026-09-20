@@ -1,4 +1,4 @@
- import { useState } from "react";
+ import { useEffect, useState } from "react";
  import VaultHeader from "../components/VaultHeader";
  import MediaCard from "../components/MediaCard";
  import MediaFormModal from "../components/MediaFormModal";
@@ -9,16 +9,17 @@
 
  
  const DashboardPage = ({currentUser, onLogout, onOpenAbout}) => {
-    const { items, isLoading, onAdd, onDelete, onEdit } = useContext(DataContext);
+    const { items, onAdd, onDelete, onEdit } = useContext(DataContext);
 
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [editingItem, setEditingItem] = useState(null);
     const [activeFilter, setActiveFilter] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
     const [isVaultStatOpen, setIsVaultStatOpen] = useState(false);
-    const [enlargedItem, setEnlargedItem] = useState(null);
     const [itemToDelete, setItemToDelete] = useState(null);
     const [showUploadSuccess, setShowUploadSuccess] = useState(false);
+    const [carouselIndex, setCarouselIndex] = useState(null);
+    
     const typeIcons = {
     pdf: '\u{1F4C3}',
     audio: '\u{1F3A7}',
@@ -26,29 +27,6 @@
     image: '\u{1F4F8}'  
 };
 
-    //Handlers for Media Card Forms
-
-const onOpenForm = () => {
-        setIsFormOpen(true);
-    };
-
-const handleFormSubmit = async (itemData) => {
-    if (editingItem) {
-        onEdit(itemData);
-    } else {
-        await onAdd(itemData);
-        console.log('upload done, setting success');
-        setShowUploadSuccess(true);
-    }
-    setEditingItem(null);
-};
-
-const handleOpenEdit = (item) => {
-    setEditingItem(item);
-    setIsFormOpen(true);
-};
-
-const mediaTypes = ['image', 'audio', 'video', 'pdf']
 
 // Filter Functionality
 
@@ -65,6 +43,47 @@ if (searchQuery !== '') {
         item.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
     );
 }
+const enlargedItem = carouselIndex !== null ? visibleItems[carouselIndex] : null;
+
+    //Handlers for Media Card Forms
+
+const onOpenForm = () => {
+        setIsFormOpen(true);
+    };
+
+const handleFormSubmit = async (itemData) => {
+    if (editingItem) {
+        onEdit(itemData);
+    } else {
+        await onAdd(itemData);
+        setShowUploadSuccess(true);
+    }
+    setEditingItem(null);
+};
+
+const handleOpenEdit = (item) => {
+    setEditingItem(item);
+    setIsFormOpen(true);
+};
+
+// Carousel Navigation Handlers
+
+const handlePrev = () => setCarouselIndex(i => Math.max(0, i-1));
+const handleNext = () => setCarouselIndex(i => Math.min(visibleItems.length - 1, i + 1));
+
+useEffect(() => {
+    if (carouselIndex === null) return;
+    const handleKey = (e) => {
+        if (e.key === 'ArrowLeft') handlePrev();
+        if (e.key === 'ArrowRight') handleNext();
+        if (e.key === 'Escape') setCarouselIndex(null);
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+}, [carouselIndex])
+
+const mediaTypes = ['image', 'audio', 'video', 'pdf']
+
 
     return (
     <main className="dashboard">
@@ -72,14 +91,14 @@ if (searchQuery !== '') {
         searchQuery={searchQuery} activeFilter={activeFilter} 
         onFilterChange={setActiveFilter} onSearchChange={setSearchQuery} onLogout={onLogout} />
          <div className="card-grid">
-             {visibleItems.map((item) => (
+             {visibleItems.map((item, index) => (
                  <MediaCard 
             key={item.id} 
                 {...item} 
                 onRequestDelete={setItemToDelete}
                 onDelete={onDelete}
                 onEdit={handleOpenEdit}
-                onEnlarge={setEnlargedItem}/> 
+                onEnlarge={() => setCarouselIndex(index)}/> 
             ))}
          </div>
        <div className="stats">
@@ -120,25 +139,70 @@ if (searchQuery !== '') {
          onClose={() => setShowUploadSuccess(false)}
          autoClose={3000} />
 
-
-        <Footer className="dash-about"onOpenAbout={onOpenAbout} />
-         {enlargedItem && (
-            <div className="lightbox-backdrop" onClick={() => setEnlargedItem(null)}>
+        {enlargedItem && (
+            <div className="lightbox-backdrop" onClick={() => setCarouselIndex(null)}>
                 <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
-                    {enlargedItem.thumbnail
-                    ? <img src={`http://localhost:8080/media-items/${enlargedItem.id}/file`} alt={enlargedItem.title} className="lightbox-image" />
-                    : <span className="lightbox-icon">{typeIcons[enlargedItem.type]}</span>
-                }
-                    <div className="lightbox-caption">
-                        <h3>{enlargedItem.title}</h3>
-                        <ul>
-                            {enlargedItem.tags.map(tag => <li key={tag}>{tag}</li>)}
-                        </ul>
+                    {enlargedItem.type === 'image'
+                        ? <img src={`http://localhost:8080/media-items/${enlargedItem.id}/file`} 
+                               alt={enlargedItem.title} 
+                               className="lightbox-image" />
+                        : enlargedItem.type === 'video' 
+                        ? <video 
+                            key={enlargedItem.id}
+                            controls 
+                            className="lightbox-video"
+                            src={`http://localhost:8080/media-items/${enlargedItem.id}/file`}
+                            />
+                        :   enlargedItem.type === 'pdf'
+                        ? <div className="lightbox-pdf-open">
+                            <p>{enlargedItem.title}</p>
+                            <a
+                                href={`http://localhost:8080/media-items/${enlargedItem.id}/file`}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="button"
+                            >
+                                Open PDF    
+                            </a>
+                            </div>
+                        : <span className="lightbox-icon">{typeIcons[enlargedItem.type]}</span>
+                    }
 
+                    {enlargedItem.type === 'image' && (
+                         <div className="lightbox-caption">
+                                <h3>{enlargedItem.title}</h3>
+                                <ul>
+                                    {enlargedItem.tags.map(tag => <li key={tag}>{tag}</li>)}
+                                </ul>
+                            </div>
+                    )}
+                     <div className="carousel-dots">
+                        {visibleItems.map((_, i) => (
+                         <span
+                            key={i}
+                            className={`carousel-dot ${i === carouselIndex ? 'active' : ''}`}
+                            onClick={(e) => {e.stopPropagation(); setCarouselIndex(i); }}
+                         />
+                        ))}
                     </div>
+
+                    {carouselIndex > 0 && (
+                        <button className="carousel-btn prev" onClick={(e) => {e.stopPropagation(); handlePrev(); }}>‹</button>
+                     )}
+                    {carouselIndex !== null && carouselIndex < visibleItems.length -1 && (
+                        <button className="carousel-btn next" onClick={(e) => {e.stopPropagation(); handleNext(); }}>›</button>
+                    )}
                 </div>
             </div>
          )}
+
+        
+
+
+
+
+        <Footer className="dash-about"onOpenAbout={onOpenAbout} />
+         
     </main>
        
     )

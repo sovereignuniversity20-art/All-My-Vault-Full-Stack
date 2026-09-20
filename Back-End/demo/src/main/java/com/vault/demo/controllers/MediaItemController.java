@@ -53,7 +53,6 @@ public class MediaItemController {
             mediaItemRepository.save(mediaItem);
             return new ResponseEntity<>(MediaItemDTO.from(mediaItem), HttpStatus.CREATED);
         } catch (Exception e) {
-            System.out.println("Principal name: " + principal.getName());
             return new ResponseEntity<>("Error uploading media item: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

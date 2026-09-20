@@ -42,6 +42,47 @@ button:hover {
     gap: 16px;
     padding: 2rem 10%;  
 }
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(107, 31, 42, 0.7);
+    color: var(--off-white);
+    border: none;
+    font-size: 2rem;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+    z-index: 10;
+}
+
+.carousel-btn.prev { left: -3rem; }
+
+.carousel-btn.next { right: -3rem; }
+
+.carousel-dots {
+    position: absolute;
+    bottom: -2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.5rem;
+}
+
+.carousel-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--pink);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.carousel-dot.active {
+    background: var(--burgundy);
+}
+
 .cover-logo {
     height: 90px;
 }
@@ -111,6 +152,9 @@ button:hover {
     font-family: var(--font-reg);
     font-size: 22px;
     color: var(--off-white);
+    display: flex;
+    position: relative;
+    
 }
 
 footer {
@@ -165,7 +209,8 @@ header {
 .lightbox-backdrop {
     position: fixed;
     inset: 0;
-    background-color: rgba(4, 4, 4, 0.85);
+    background-color: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(4px);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -210,6 +255,29 @@ header {
     gap: 0.5rem;
     flex-wrap: wrap;
     font-size: 0.8rem;
+}
+
+.lightbox-video {
+    max-width: 90vw;
+    max-height: 80vh;
+    display: block;
+}
+
+.lightbox-pdf {
+    width: 80 vw;
+    height: 80vh;
+    border: none;
+}
+
+.lightbox-pdf-open {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 2rem;
+    background: var(--pink-light);
+    border: 2px solid var(--burgundy);
+    border-radius: 12px;
 }
 
 .login-content {
@@ -415,9 +483,18 @@ header {
 }
 
 .pass {
+    position: relative;
+    display: flex;
+    align-items: center;
     font-family: var(--font-reg);
     font-size: 22px;
     color: var(--off-white);
+}
+
+.password-toggle {
+    right: 0.5rem;
+    cursor: pointer;
+    user-select: none;
 }
 
 .pass-confirm {

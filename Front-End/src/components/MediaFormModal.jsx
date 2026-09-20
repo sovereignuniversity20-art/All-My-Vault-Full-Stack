@@ -28,6 +28,8 @@ const MediaFormModal = ({isOpen, editingItem, onSubmit, onClose}) => {
 
         let thumbnail = null;
         if (type === 'image') thumbnail = URL.createObjectURL(file);
+        if (type === 'video') thumbnail = URL.createObjectURL(file);
+        if (type === 'pdf') thumbnail = URL.createObjectURL(file);
        
         setFormValues({...formValues, type: type, title: file.name, file: file});
     };
@@ -65,26 +67,27 @@ return (
         <h3>Add to Vault</h3>  
         {editingItem ? 'Edit Item' : 'Add to Vault'}     
         <label>
-        Title:
-    <input type="text" value={formValues.title} 
-    onChange={(e) => setFormValues({...formValues, title:e.target.value})} />
-    </label>
+            Title:
+             <input type="text" value={formValues.title} 
+            onChange={(e) => setFormValues({...formValues, title:e.target.value})} />
+        </label>
 
-    <label>
-    Tags:    
-    <input type="text" value={formValues.tags}
-    onChange={(e) => setFormValues({...formValues, tags:e.target.value})} />
-    </label> 
+        <label>
+            Tags:    
+            <input type="text" value={formValues.tags}
+            onChange={(e) => setFormValues({...formValues, tags:e.target.value})} />
+        </label> 
     
-    <label>
-       <input type="file" onChange={handleFileChange}/> 
-    </label>
+        <label>
+            Add media
+            <input type="file" onChange={handleFileChange} accept='image/*, video/*, audio/*,.pdf'/> 
+        </label>
 
-    <button type="button" onClick={handleSubmit}>Save
-    </button>
+        <button type="button" onClick={handleSubmit}>Save
+        </button>
     
-    <button type="button" onClick={onClose}>Cancel 
-    </button>
+        <button type="button" onClick={onClose}>Cancel 
+        </button>
     </div>
 </div>
 )
