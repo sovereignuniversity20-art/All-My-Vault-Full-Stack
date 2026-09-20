@@ -7,7 +7,7 @@ const typeIcons = {
     image: '\u{1F4F8}'  
 };
 
-const MediaCard = ({id, title,type, tags, thumbnail, dateAdded, onDelete, onEdit, onEnlarge, onRequestDelete}) => {
+const MediaCard = ({id, title,type, tags, thumbnail, dateAdded, onEdit, onEnlarge, onRequestDelete}) => {
   
     
 

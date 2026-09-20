@@ -1,7 +1,7 @@
 import { useState } from "react";
 import logo from '../images/logo.png'
 
-const VaultHeader = ({currentUser, onOpenForm, searchQuery, activeFilter, onFilterChange, onSearchChange, onLogout}) => {
+const VaultHeader = ({currentUser, onOpenForm, searchQuery, onFilterChange, onSearchChange, onLogout}) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     
     return (
