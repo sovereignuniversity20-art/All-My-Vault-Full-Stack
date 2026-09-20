@@ -178,6 +178,23 @@ if (searchQuery !== '') {
             </div>
          )}
 
+         <div className="carousel-dots">
+            {visibleItems.map((_, i) => (
+                <span
+                    key={i}
+                    className={`carousel-dot ${i === carouselIndex ? 'active' : ''}`}
+                    onClick={(e) => {e.stopPropagation(); setCarouselIndex(i); }}
+                />
+            ))}
+         </div>
+
+         {carouselIndex > 0 && (
+            <button className="carousel-btn prev" onClick={(e) => {e.stopPropagation(); handlePrev(); }}>‹</button>
+         )}
+          {carouselIndex < visibleItems.length -1 && (
+            <button className="carousel-btn next" onClick={(e) => {e.stopPropagation(); handleNext(); }}>›</button>
+         )}
+
         <Footer className="dash-about"onOpenAbout={onOpenAbout} />
          
     </main>
