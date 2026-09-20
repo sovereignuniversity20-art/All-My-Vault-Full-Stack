@@ -130,14 +130,14 @@ if (searchQuery !== '') {
                                className="lightbox-image" />
                         : enlargedItem.type === 'video' 
                         ? <video 
-                            key={enlargedItem}
-                            contols 
+                            key={enlargedItem.id}
+                            controls 
                             className="lightbox-video"
-                            src={`http://localhost8080/media-items/${enlargedItem.id}/file`}
+                            src={`http://localhost:8080/media-items/${enlargedItem.id}/file`}
                             />
                         :   enlargedItem.type === 'pdf'
                         ? <div className="lightbox-pdf-open">
-                            <p>{enlargedItem.title}</p> 
+                            <p>{enlargedItem.title}</p>
                             <a
                                 href={`http://localhost:8080/media-items/${enlargedItem.id}/file`}
                                 target="_blank"
@@ -149,14 +149,15 @@ if (searchQuery !== '') {
                             </div>
                         : <span className="lightbox-icon">{typeIcons[enlargedItem.type]}</span>
                     }
-                    <div className="lightbox-caption">
-                        <h3>{enlargedItem.title}</h3>
-                        <ul>
-                            console.log('enlarged tags:', enlargedItem.tags);
-                            {enlargedItem.tags.map(tag => <li key={tag}>{tag}</li>)}
-                        </ul>
 
-                    </div>
+                    {enlargedItem.type !== 'pdf' && (
+                         <div className="lightbox-caption">
+                                <h3>{enlargedItem.title}</h3>
+                                <ul>
+                                    {enlargedItem.tags.map(tag => <li key={tag}>{tag}</li>)}
+                                </ul>
+                            </div>
+                    )}
                 </div>
             </div>
          )}

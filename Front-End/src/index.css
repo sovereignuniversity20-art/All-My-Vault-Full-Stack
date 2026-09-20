@@ -165,7 +165,8 @@ header {
 .lightbox-backdrop {
     position: fixed;
     inset: 0;
-    background-color: rgba(4, 4, 4, 0.85);
+    background-color: rgba(44, 44, 44, 0.3);
+    backdrop-filter: blur(4px);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -222,6 +223,17 @@ header {
     width: 80 vw;
     height: 80vh;
     border: none;
+}
+
+.lightbox-pdf-open {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 2rem;
+    background: var(--pink-light);
+    border: 2px solid var(--burgundy);
+    border-radius: 12px;
 }
 
 .login-content {
