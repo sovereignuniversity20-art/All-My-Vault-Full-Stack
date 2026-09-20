@@ -13,8 +13,8 @@ const MediaCard = ({id, title,type, tags, thumbnail, dateAdded, onDelete, onEdit
 
     return(
         <article className="mediacard" onClick={() => onEnlarge({id, title, type, tags, thumbnail, dateAdded})}>
-        <ReusableButton label= "🗑" onClick={(e) => { e.stopPropagation(); onRequestDelete(id)}} variant="delete" />
-        <ReusableButton label="✏️" onClick={(e) => { e.stopPropagation(); onEdit({id, title, type, tags, thumbnail, dateAdded}); }} />
+        <ReusableButton label= "🗑" aria-label="Delete Item" onClick={(e) => { e.stopPropagation(); onRequestDelete(id)}} variant="delete" />
+        <ReusableButton label="✏️" aria-label="Delete Item" onClick={(e) => { e.stopPropagation(); onEdit({id, title, type, tags, thumbnail, dateAdded}); }} />
             <br></br>
             <br></br>
         <h4>{title}</h4>

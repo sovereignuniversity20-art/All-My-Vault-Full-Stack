@@ -1,4 +1,4 @@
-const ReusableButton = ({label, onClick, variant}) => {
+const ReusableButton = ({label, onClick}) => {
     return (
     <button type="button" onClick={onClick}>{label}</button>
 )};

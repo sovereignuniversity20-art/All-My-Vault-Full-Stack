@@ -9,7 +9,7 @@
 
  
  const DashboardPage = ({currentUser, onLogout, onOpenAbout}) => {
-    const { items, isLoading, onAdd, onDelete, onEdit } = useContext(DataContext);
+    const { items, onAdd, onDelete, onEdit } = useContext(DataContext);
 
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [editingItem, setEditingItem] = useState(null);
