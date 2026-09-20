@@ -37,7 +37,6 @@ const handleFormSubmit = async (itemData) => {
         onEdit(itemData);
     } else {
         await onAdd(itemData);
-        console.log('upload done, setting success');
         setShowUploadSuccess(true);
     }
     setEditingItem(null);
@@ -125,10 +124,26 @@ if (searchQuery !== '') {
          {enlargedItem && (
             <div className="lightbox-backdrop" onClick={() => setEnlargedItem(null)}>
                 <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
-                    {enlargedItem.thumbnail
-                    ? <img src={`http://localhost:8080/media-items/${enlargedItem.id}/file`} alt={enlargedItem.title} className="lightbox-image" />
-                    : <span className="lightbox-icon">{typeIcons[enlargedItem.type]}</span>
-                }
+                    {enlargedItem.type === 'image'
+                        ? <img src={`http://localhost:8080/media-items/${enlargedItem.id}/file`} 
+                               alt={enlargedItem.title} 
+                               className="lightbox-image" />
+                        : enlargedItem.type === 'video' 
+                        ? <video 
+                            key={enlargedItem}
+                            contols 
+                            className="lightbox-video"
+                            src={`http://localhost8080/media-items/${enlargedItem.id}/file`}
+                            />
+                        :   enlargedItem.type === 'pdf'
+                        ? <iframe
+                            key={enlargedItem.id}
+                            src={`http://localhost:8080/media-items/${enlargedItem.id}/file`}
+                            className="lightbox-pdf"
+                            title={enlargedItem.title}
+                            />
+                        : <span className="lightbox-icon">{typeIcons[enlargedItem.type]}</span>
+                    }
                     <div className="lightbox-caption">
                         <h3>{enlargedItem.title}</h3>
                         <ul>
