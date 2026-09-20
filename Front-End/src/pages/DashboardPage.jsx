@@ -148,7 +148,7 @@ if (searchQuery !== '') {
                         : <span className="lightbox-icon">{typeIcons[enlargedItem.type]}</span>
                     }
 
-                    {enlargedItem.type !== 'pdf' && (
+                    {enlargedItem.type === 'image' && (
                          <div className="lightbox-caption">
                                 <h3>{enlargedItem.title}</h3>
                                 <ul>

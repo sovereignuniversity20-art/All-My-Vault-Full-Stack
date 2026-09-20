@@ -28,6 +28,8 @@ const MediaFormModal = ({isOpen, editingItem, onSubmit, onClose}) => {
 
         let thumbnail = null;
         if (type === 'image') thumbnail = URL.createObjectURL(file);
+        if (type === 'video') thumbnail = URL.createObjectURL(file);
+        if (type === 'pdf') thumbnail = URL.createObjectURL(file);
        
         setFormValues({...formValues, type: type, title: file.name, file: file});
     };
