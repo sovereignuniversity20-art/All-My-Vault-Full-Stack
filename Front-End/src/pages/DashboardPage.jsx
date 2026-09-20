@@ -119,9 +119,7 @@ if (searchQuery !== '') {
          onClose={() => setShowUploadSuccess(false)}
          autoClose={3000} />
 
-
-        <Footer className="dash-about"onOpenAbout={onOpenAbout} />
-         {enlargedItem && (
+        {enlargedItem && (
             <div className="lightbox-backdrop" onClick={() => setEnlargedItem(null)}>
                 <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
                     {enlargedItem.type === 'image'
@@ -161,6 +159,9 @@ if (searchQuery !== '') {
                 </div>
             </div>
          )}
+
+        <Footer className="dash-about"onOpenAbout={onOpenAbout} />
+         
     </main>
        
     )
