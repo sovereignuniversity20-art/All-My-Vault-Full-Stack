@@ -13,7 +13,7 @@ const LoginPage = (props) => {
     const [currentStatus, setCurrentStatus] = useState('login');
     const [confirmPassword, setConfirmPassword] = useState ('');
     const [isUnlocking, setIsUnlocking] = useState (false);
-
+    const [showPassword, setShowPassword] = useState(false);
    
 
     const handleSubmit = async (e) => {
@@ -121,9 +121,18 @@ const LoginPage = (props) => {
                 <div className="pass">
                     <label>
                     Password:
-                    <input type="password" value={password}
+                    <input type={showPassword ? "text" : "password"} 
+                    value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     />
+                    <span
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="password-toggle"
+                        aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    >
+                        {showPassword ? '👁️' : '👁️‍🗨️'}    
+                    </span>    
+
                     {errors.password && <span>{errors.password}</span>}
                     </label>
                 </div>
@@ -132,8 +141,16 @@ const LoginPage = (props) => {
                     {currentStatus === 'signup' && (
                     <label>
                     Confirm Password:
-                    <input type="password" value={confirmPassword}
+                    <input type={showPassword ? "text" : "password"} 
+                    value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}  />
+                    <span
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="password-toggle"
+                        aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    >
+                        {showPassword ? '👁️' : '👁️‍🗨️'}    
+                    </span>    
                     {errors.confirmPassword && <span>{errors.confirmPassword}</span>}
                     </label>
                     )} 
