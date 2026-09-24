@@ -202,8 +202,8 @@ Supported media types: images, video (MP4 recommended, 50MB max), PDF, audio, an
 
 ## Author
 
-Shawn "Hero" Harrell
-LaunchCode Full-Time Software Development, 2026
+Shawn "Hero" Harrell -
+LaunchCode Full-Time Software Development, 2026 - 
 Founder, Sovereign University
 
 ---
