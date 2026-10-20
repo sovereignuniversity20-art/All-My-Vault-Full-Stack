@@ -5,6 +5,12 @@ export const DataProvider = ({ children }) => {
     const [items, setItems] = useState(null);
     const [error, setError] = useState(null);
     const [token, setToken] = useState(null);
+    const login = (newToken) => {
+        setToken(newToken);
+    };
+    const logout = () => {
+        setToken(null);
+    };
     
    
      //Handlers for media card
@@ -104,7 +110,7 @@ export const DataProvider = ({ children }) => {
     
 
 return (
-    <DataContext.Provider value={{items, isLoading, error, token, setToken, onAdd: handleAdd, onEdit: handleEdit, onDelete: handleDelete}}>
+    <DataContext.Provider value={{items, isLoading, error, token, login, logout, onAdd: handleAdd, onEdit: handleEdit, onDelete: handleDelete}}>
         {children}
     </DataContext.Provider>
     );

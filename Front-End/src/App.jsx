@@ -1,12 +1,12 @@
 import { Route, Routes, Navigate } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import LoginPage from './pages/LoginPage.jsx';
 import DashboardPage from './pages/DashboardPage.jsx';
 
 import './index.css';
 import AboutOverlay from './components/AboutOverlay.jsx';
-import { DataProvider } from './context/DataContext.jsx';
+import { DataContext, DataProvider } from './context/DataContext.jsx';
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -14,6 +14,7 @@ function App() {
   const [isAuthorized, setIsAuthorized] = useState (false);
   const [isAboutOpen, setIsAboutOpen] = useState (false);
   const navigate = useNavigate();
+  const {logout, token} = useContext(DataContext);
 
   //Handlers for states
 
@@ -23,10 +24,20 @@ function App() {
     navigate('/dashboard');
   };
 
-  const handleLogout = () => {
-   setCurrentUser(null);
-    setIsAuthorized(false)
-    navigate('/');
+  const handleLogout = async () => {
+    try {
+      await fetch('http://localhost:8080/auth/logout', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+        logout();
+        setCurrentUser(null);
+        setIsAuthorized(false)
+      navigate('/');
+    }
   };
 
   const handleOpenAbout = () => {

@@ -14,7 +14,7 @@
 body {
     margin:0;
     font-family: 'Lato', sans-serif;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
 button {
@@ -96,8 +96,8 @@ button:hover {
     min-height: 100vh;
     height: 100vh;
     display: grid;
-    grid-template-rows: auto 1fr auto;
-    padding: 0 2%;
+    grid-template-rows: auto 1fr auto auto;
+    padding: 0.5rem 2%;
 }
 
 .door-left {
@@ -144,7 +144,7 @@ button:hover {
     list-style: none;
     padding: 0;
     margin: 0;
-    z-index: 40;
+    z-index: 500;
     
 }
 
@@ -153,7 +153,7 @@ button:hover {
     font-size: 22px;
     color: var(--off-white);
     display: flex;
-    position: relative;
+    
     
 }
 
@@ -170,7 +170,12 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
+    z-index: 50;
     margin-top: -1.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    
 }
 
 .header-left {
@@ -179,10 +184,10 @@ header {
     align-items: center;
     align-content: center;
     gap: 10px;
-    top: 2vh;
     color: var(--off-white);
-    left: 2vw;
     flex-wrap: wrap;
+    min-width: 0;
+    
 }
 
 .header-right {
@@ -264,7 +269,7 @@ header {
 }
 
 .lightbox-pdf {
-    width: 80 vw;
+    width: 80vw;
     height: 80vh;
     border: none;
 }
@@ -382,8 +387,7 @@ header {
 .logo {
     position: relative;
     height: 60px;
-    top: 2.5vh;
-    left: -.3vw;
+    
 }
 
 
@@ -459,7 +463,7 @@ header {
 .modal-buttons {
     display: flex;
     justify-content: center;
-    gap: rem;
+    gap: 1rem;
 }
 
 
@@ -483,7 +487,7 @@ header {
 }
 
 .pass {
-    position: relative;
+    
     display: flex;
     align-items: center;
     font-family: var(--font-reg);
@@ -511,7 +515,8 @@ header {
 
 .stats {
     position: relative;
-    bottom: -2.75vh;
+    
+    align-self: end;
     left: 2vw;
     z-index: 10;
     width: fit-content;
@@ -573,62 +578,129 @@ header {
 
 @media (max-width: 768px) {
     header {
-        flex-direction: column;
-        gap: 8px;
+        flex-wrap: wrap;
+        gap: 4px;
+        padding: 0.25rem;
+        margin-top: 0;
     }
     .card-grid {
         grid-template-columns: repeat(2, 1fr);
+        padding: 0.5rem 0;
+        gap: 8px;
+        width: 100%;
+        min-width: 0;
+
     
+    }
+
+    .card-grid * {
+        min-width: 0;
     }
     .card-icon {
         font-size: 1rem;
     }
+
+    .dashboard {
+        padding: 0 5%;
+        overflow-x: hidden;
+    }
+
     .header-center {
         display: none;
+    } 
+    .header-left {
+        flex: 1;
+        min-width: 0;
+        gap: 6px;
     }
-   
-    .title {
-        left: 19vw;
+    .header-right {
+        flex: 0;
+        gap: 6px;
     }
-    .cover-logo {
-        left: 68vw;
-        top: 10vh;
+
+
+    header button {
+        padding: 0.15rem 0.4rem;
+        font-size: 0.8rem;
     }
-    .name {
-        left: 25.5vw;
+
+    .mediacard {
+        min-width: 0;
+       
     }
-    .email {
-        left: 35vw;
-    }
-    .pass {
-        left: 32vw;
-    }
-    .pass-confirm {
-        left: 26vw;
-    }
-    .unlock-create {
-        left: 43vw;
-    }
-    .login-signup {
-        left: 39vw;
-    }
-    .login-about {
-        left: 46vw;
-    }
-     .login h4 {
-        left: 16vw;
-        top: 26vh;
+    .search-box {
+        width: 100px;
     }
     
 }
 
 @media (max-width: 480px) {
+
+    .card-grid {
+        grid-template-columns: 1fr;
+        padding: 0.5rem 0;
+        gap: 8px;
+        width: 100%;
+        min-width: 0;
+    }
+
+    .dashboard {
+        padding: 0 3%;
+        overflow-x: hidden;
+    }
+
+    header {
+        gap: 4px;
+        padding: 0 4px;
+        margin-top: 0;
+
+    }
+
+    .header-center {
+        flex: 1;
+    }
+
+    .header-left {
+        gap: 4px;
+        min-width: 0;
+        flex: auto;
+    }
+
+    .header-right {
+        flex: 0;
+        gap: 4px;
+    }
+
+    .header-right h4 {
+        display: none;
+    }
+
     .login-form-container {
         width: 240px;
         bottom: 5vh;
     }
 
+    .mediacard {
+        max-width: 100%;
+        min-width: 0;
+        min-height: unset;
+        
+    }
+
+    .search-box {
+        display: none;
+    }
+
+
     .title {
         display: none;
+    }
+
+    footer {
+        display: none;
+    }
+
+    .image {
+        height: 100px;
     }
 }

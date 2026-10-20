@@ -44,7 +44,7 @@ public class UserRequestDTO {
         return lastName;
     }
 
-    public void setName(String lastName) {
+    public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 

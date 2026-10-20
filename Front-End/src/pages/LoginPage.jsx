@@ -4,7 +4,7 @@ import logo from '../images/logo.png';
 import { DataContext } from "../context/DataContext";
 
 const LoginPage = (props) => {
-    const {setToken} = useContext(DataContext);
+    const {login} = useContext(DataContext);
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
@@ -45,6 +45,7 @@ const LoginPage = (props) => {
         setErrors({...errors, confirmPassword:"Passwords do not match, please re-enter."});
     } else {
         if (currentStatus === 'signup') {
+            const registrationBody = { firstName, lastName, email, password };
             const response = await fetch(`http://localhost:8080/auth/register`, {
             method: 'POST',
             headers: { 'Content-Type': `application/json` },
@@ -66,7 +67,7 @@ const LoginPage = (props) => {
             return;
             }       
             const data = await response.json();
-            setToken(data.token);
+            login(data.token);
             setIsUnlocking(true);
             setTimeout(() => {
                 props.onLogin({ name: email, email });
