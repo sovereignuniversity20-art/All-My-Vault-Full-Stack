@@ -211,6 +211,14 @@ header {
     color: #E8B4BC;
 }
 
+.key-requirements {
+    margin: 0.25rem 0 0 1rem;
+    padding: 0;
+    opacity: 0.75;
+    font-size: 0.75rem;
+    line-height: 1.6;
+}
+
 .lightbox-backdrop {
     position: fixed;
     inset: 0;
@@ -566,6 +574,84 @@ header {
 .wheel.spinning {
     transform: translate(-50%, -50%) rotate(720deg);
     opacity: 0;
+}
+
+.why-vault {
+    margin-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    padding-top: 0.75rem;
+    color: #ffffff
+
+}
+
+.why-vault-toggle {
+    background: none;
+    border: none;
+    color: inherit;
+    font-family: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0;
+    width: 100%;
+    text-align: left;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    opacity: 0.8;
+    justify-content: center;
+}
+
+.why-vault-toggle:hover {
+    opacity: 1;
+    
+}
+
+.why-vault-arrow {
+    display: inline-block;
+    transition: transform 0.2s ease;
+    font-size: 0.9rem;
+}
+
+.why-vault-arrow.open {
+    transform: rotate(180deg);
+}
+
+.why-vault-content {
+    background: rgba(0, 0, 0, 0.75);  /* add this */
+    backdrop-filter: blur(4px);
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem 1.5rem;
+}
+
+.why-vault-item {
+    font-size: 0.78rem;
+    line-height: 1.4;
+}
+
+.why-vault-item:first-child {
+    grid-column: 1 / -1; 
+}
+
+.why-vault-label {
+    display: block;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 0.7rem;
+    margin-bottom: 0.1rem;
+    opacity: 0.9;
+}
+
+.why-vault-item p,
+.key-requirements {
+    margin: 0;
+    opacity: 0.75;
+    opacity: 1;
 }
 
 

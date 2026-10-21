@@ -8,7 +8,7 @@ import './index.css';
 import AboutOverlay from './components/AboutOverlay.jsx';
 import { DataContext, DataProvider } from './context/DataContext.jsx';
 
-function App() {
+function AppContent() {
   const [currentUser, setCurrentUser] = useState(null);
   
   const [isAuthorized, setIsAuthorized] = useState (false);
@@ -48,7 +48,6 @@ function App() {
 
   return (
     <main className='App'>
-      <DataProvider>
         <Routes>
         <Route path="/" element={<LoginPage onLogin={handleLogin} onOpenAbout={handleOpenAbout}/>} />
         <Route path="/dashboard" element={isAuthorized ? <DashboardPage 
@@ -56,13 +55,20 @@ function App() {
         : <Navigate to="/" />} />
         <Route path="*" element={<Navigate to="/" />} />
         </Routes>
-      </DataProvider>
       <AboutOverlay className="about" isOpen={isAboutOpen} onClose={() =>
           setIsAboutOpen(false)} />
     </main>
 
 
   )
+};
+
+const App = () => {
+  return (
+    <DataProvider>
+      <AppContent />
+    </DataProvider>
+  );
 };
 
 export default App;

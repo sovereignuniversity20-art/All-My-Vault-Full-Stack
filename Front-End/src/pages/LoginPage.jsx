@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import wheel from '../images/vault-wheel.png';
 import logo from '../images/logo.png';
 import { DataContext } from "../context/DataContext";
+import WhyVault from "../components/WhyVault";
 
 const LoginPage = (props) => {
     const {login} = useContext(DataContext);
@@ -121,7 +122,7 @@ const LoginPage = (props) => {
       
                 <div className="pass">
                     <label>
-                    Password:
+                    Vault Key:
                     <input type={showPassword ? "text" : "password"} 
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
@@ -129,7 +130,7 @@ const LoginPage = (props) => {
                     <span
                         onClick={() => setShowPassword(!showPassword)}
                         className="password-toggle"
-                        aria-label={showPassword ? 'Hide password' : 'Show password'}
+                        aria-label={showPassword ? 'Hide vault key' : 'Show vault key'}
                     >
                         {showPassword ? '👁️' : '👁️‍🗨️'}    
                     </span>    
@@ -141,14 +142,14 @@ const LoginPage = (props) => {
                 <div className="pass-confirm">
                     {currentStatus === 'signup' && (
                     <label>
-                    Confirm Password:
+                    Confirm Vault Key:
                     <input type={showPassword ? "text" : "password"} 
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}  />
                     <span
                         onClick={() => setShowPassword(!showPassword)}
                         className="password-toggle"
-                        aria-label={showPassword ? 'Hide password' : 'Show password'}
+                        aria-label={showPassword ? 'Hide Vault Key' : 'Show Vault Key'}
                     >
                         {showPassword ? '👁️' : '👁️‍🗨️'}    
                     </span>    
@@ -168,7 +169,8 @@ const LoginPage = (props) => {
                     "Sign up for an account"}</button>
                 </div> 
         
-
+                <WhyVault />
+                
                 <div className="login-about">
                     <button className="about" type="button"
                     onClick={props.onOpenAbout} >
