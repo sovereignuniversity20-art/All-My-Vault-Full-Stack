@@ -24,6 +24,9 @@ public class MediaItem {
     private String fileName;
     private String contentType;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "collection_id")
+    private Collection collection;
 
     @Lob
     private byte[] fileData;
@@ -102,7 +105,6 @@ public class MediaItem {
     }
 
 
-
     public String getContentType() {
         return contentType;
     }
@@ -110,6 +112,10 @@ public class MediaItem {
     public void setContentType(String contentType) {
         this.contentType = contentType;
     }
+
+    public Collection getCollection() { return  collection; }
+
+    public void setCollection(Collection collection) { this.collection = collection; }
 
     @Override
     public boolean equals(Object o) {

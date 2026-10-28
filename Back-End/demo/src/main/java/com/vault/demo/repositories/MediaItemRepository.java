@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface MediaItemRepository extends JpaRepository<MediaItem, Long> {
     List<MediaItem> findByUserEmail(String email);
+    List<MediaItem> findByCollectionId(Long collectionId);
 
 }
