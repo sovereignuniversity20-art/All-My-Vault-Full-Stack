@@ -89,6 +89,16 @@ public class MediaItemController {
         }
     }
 
+    @GetMapping("/collection/{collectionId}")
+    public ResponseEntity<?> getMediaItemsByCollection(@PathVariable Long collectionId, Principal principal) {
+        List<MediaItemDTO> items = mediaItemRepository.findByCollectionId(collectionId)
+                .stream()
+                .filter(item -> item.getUser() != null && item.getUser().getEmail().equals(principal.getName()))
+                .map(MediaItemDTO::from)
+                .toList();
+        return new ResponseEntity<>(items, HttpStatus.OK);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<?> updateMediaItem(@PathVariable("id") Long id, @RequestBody MediaItem mediaItem, Principal principal){
         MediaItem existingMediaItem = mediaItemRepository.findById(id).orElse(null);
